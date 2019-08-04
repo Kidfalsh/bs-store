@@ -3,14 +3,39 @@ import { Router as DefaultRouter, Route, Switch } from 'react-router-dom';
 import dynamic from 'umi/dynamic';
 import renderRoutes from 'umi/lib/renderRoutes';
 import history from '@tmp/history';
+import { routerRedux } from 'dva';
 
-const Router = DefaultRouter;
+const Router = routerRedux.ConnectedRouter;
 
 const routes = [
   {
     path: '/',
-    component: require('../HelloWorld').default,
-    exact: true,
+    component: require('../../layout').default,
+    routes: [
+      {
+        path: '/app',
+        component: require('../App').default,
+        exact: true,
+      },
+      {
+        path: '/puzzlecards',
+        component: require('../puzzlecards').default,
+        exact: true,
+      },
+      {
+        path: '/',
+        component: require('../Login').default,
+        exact: true,
+      },
+      {
+        component: () =>
+          React.createElement(
+            require('E:/fritt/bs-store/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
+              .default,
+            { pagesPath: 'src/page', hasRoutesInConfig: true },
+          ),
+      },
+    ],
   },
   {
     component: () =>
